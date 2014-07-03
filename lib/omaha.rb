@@ -1,4 +1,15 @@
+require_relative 'omaha/settings'
+require_relative 'omaha/match'
+
+
 module Omaha
+  def self.settings
+    @settings ||= Omaha::Settings.new
+  end
+
+  def self.match
+    @match ||= Omaha::Match.new
+  end
 end
 
 
