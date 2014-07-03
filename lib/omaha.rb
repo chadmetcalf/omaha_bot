@@ -1,3 +1,4 @@
+require_relative 'omaha/parser'
 require_relative 'omaha/settings'
 require_relative 'omaha/match'
 
