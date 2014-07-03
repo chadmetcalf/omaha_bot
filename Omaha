@@ -6,8 +6,6 @@ Dotenv.load
 require 'bundler'
 Bundler.require(:default, ENV['env'])
 
-require 'omaha'
+require './lib/omaha_bot'
 
-match = Omaha::Match.new
-
-match.play
+OmahaBot.runner

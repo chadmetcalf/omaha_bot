@@ -1,4 +1,4 @@
-module Omaha
+module OmahaBot
   describe Match do
     it "has state" do
 

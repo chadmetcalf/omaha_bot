@@ -1,4 +1,4 @@
-module Omaha
+module OmahaBot
   describe Parser do
     subject(:parser) { Parser.new }
 
@@ -43,7 +43,7 @@ module Omaha
     # Match smallBlind 15
     # Match bigBlind 30
     # Match onButton player1
-    describe "Match state" do
+    describe "Match" do
       let(:match) { Match.new }
       before(:each) do
         allow(subject).to receive(:match) { match }
@@ -68,7 +68,35 @@ module Omaha
         expect{parser.hear("Match onButton player1")}.
           to change{match.on_button}.from(nil).to("player1")
       end
-    end
 
+      it "max win pot" do
+        expect{parser.hear("Match maxWinPot 45")}.
+          to change{match.max_win_pot}.from(nil).to("45")
+      end
+
+      it "amount to call" do
+        expect{parser.hear("Match amountToCall 15")}.
+          to change{match.amount_to_call}.from(nil).to("15")
+      end
+
+      context "table" do
+        it "flop" do
+          expect{parser.hear("Match table [7s,Js,3h]")}.
+            to change{match.table}.from([]).to(['7s','Js','3h'])
+        end
+
+        it "turn" do
+          match.table = ['7s','Js','3h']
+
+          expect{parser.hear("Match table [7s,Js,3h,5d]")}.
+            to change{match.table}.from(['7s','Js','3h']).to(['7s', 'Js', '3h', '5d'])
+        end
+
+        it "river" do
+          expect{parser.hear("Match table [7s,Js,3h,5d,9s]")}.
+            to change{match.table}.from([]).to(['7s', 'Js', '3h', '5d', '9s'])
+        end
+      end
+    end
   end
 end

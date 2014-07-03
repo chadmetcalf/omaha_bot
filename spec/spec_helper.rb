@@ -3,7 +3,7 @@ ENV['env'] ||= "test"
 require 'dotenv'
 Dotenv.load
 
-require 'omaha'
+require 'omaha_bot'
 
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
