@@ -1,0 +1,2 @@
+describe Omaha do
+end
