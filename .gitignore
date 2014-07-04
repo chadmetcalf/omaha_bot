@@ -1,4 +1,7 @@
-.env
-Guardfile
-bundle
 .bundle
+bundle
+
+.env
+
+Guardfile
+coverage

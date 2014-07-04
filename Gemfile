@@ -12,3 +12,5 @@ group :development do
 
   gem 'ruby_gntp'
 end
+
+gem 'simplecov', :require => false, :group => :test
