@@ -7,23 +7,43 @@ module OmahaBot
 
       case args[0]
       when 'Settings', 'Match'
-        logger.debug "Parsing a #{args[0]}"
-
         send(args[0].downcase).send(prepared_method(args), prepared_data(args))
+      when 'Action'
+        if args[1] == settings.your_bot
+          player.act
+        end
+      when /player/i
+        if args[0] == settings.your_bot
+          player_hear(player, args)
+        else
+          player_hear(opponent, args)
+        end
       end
       logger.debug match.inspect
     end
 
     private
 
+    def player_hear(player, args)
+      case args[1]
+      when "wins"
+        player.finish_game
+      when "hand"
+        hand = parse_cards(args[2])
+      end
+    end
+
     def prepared_data(args)
       if args[1] =~ /table/
         # "[7s,Js,3h]" => ["7s", "Js", "3h"]
-        args[2][1..-2].split(",")
+        parse_cards(args[2])
       else
         args[2]
       end
+    end
 
+    def parse_cards(string)
+      string[1..-2].split(",")
     end
 
     def prepared_method(args)

@@ -1,5 +1,6 @@
 require_relative 'omaha_bot/parser'
 require_relative 'omaha_bot/match'
+require_relative 'omaha_bot/player'
 
 require 'logger'
 require 'ostruct'
@@ -22,15 +23,22 @@ module OmahaBot
   end
 
   def parser
-    @parser ||= OmahaBot::Parser.new
+    @parser ||= Parser.new
+  end
+
+  def player
+    @player ||= Player.new
+  end
+
+  def opponent
+    @opponent ||= Player.new
   end
 
   class Settings < OpenStruct; end
   def settings
-    @settings ||= OmahaBot::Settings.new
+    @settings ||= Settings.new
   end
 
-  class Logger < Logger; end
   def logger
     @logger || setup_logger
   end
@@ -38,9 +46,9 @@ module OmahaBot
   private
 
   def setup_logger
-    @logger = OmahaBot::Logger.new(STDOUT)
-    @logger.level = Logger::WARN
-    @logger.level = Logger::DEBUG if ENV['env'] == 'development'
+    @logger = ::Logger.new(STDOUT)
+    @logger.level = ::Logger::WARN
+    @logger.level = ::Logger::INFO if ENV['env'] == 'development'
     return @logger
   end
 end

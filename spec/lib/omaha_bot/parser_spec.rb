@@ -102,5 +102,34 @@ module OmahaBot
         end
       end
     end
+
+    # Action b t
+    context "Action" do
+      let(:match)  {double "match"}
+      let(:player) {double "player"}
+
+      before(:each) do
+        allow(parser).to receive(:match) { match }
+        allow(parser).to receive(:player) { player }
+      end
+
+      it "player is player1" do
+        parser.settings.your_bot = "player1"
+
+        expect(player).to receive(:act).once
+
+        parser.hear("Action player1 5000")
+        parser.hear("Action player2 5000")
+      end
+
+      it "player is player2" do
+        parser.settings.your_bot = "player2"
+
+        expect(player).to receive(:act).once
+
+        parser.hear("Action player1 5000")
+        parser.hear("Action player2 5000")
+      end
+    end
   end
 end
