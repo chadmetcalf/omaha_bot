@@ -28,28 +28,36 @@ module OmahaBot
 
   def player
     @player ||= Player.new
+  class Settings < OpenStruct
+    def self.instance
+      @instance ||= new
+    end
   end
 
   def opponent
     @opponent ||= Player.new
   end
-
-  class Settings < OpenStruct; end
   def settings
-    @settings ||= Settings.new
+    @settings ||= Settings.instance
   end
 
   def logger
-    @logger || setup_logger
+    @logger ||= setup_logger
   end
 
   private
 
+  class Logger < ::Logger
+    def self.instance
+      @instance ||= ::Logger.new(STDOUT)
+    end
+  end
+  
   def setup_logger
-    @logger = ::Logger.new(STDOUT)
-    @logger.level = ::Logger::WARN
-    @logger.level = ::Logger::INFO if ENV['env'] == 'development'
-    return @logger
+    logger = Logger.instance
+    logger.level = Logger::WARN
+    logger.level = Logger::INFO if ENV['env'] == 'development'
+    return logger
   end
 end
 
