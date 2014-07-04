@@ -3,6 +3,10 @@ require_relative 'omaha_bot/match'
 
 require 'logger'
 require 'ostruct'
+require 'dotenv'
+
+Dotenv.load
+ENV['env'] ||= "production"
 
 module OmahaBot
   extend self
