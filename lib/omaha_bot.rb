@@ -18,7 +18,7 @@ module OmahaBot
   end
 
   def match
-    @match ||= OmahaBot::Match.new
+    @match ||= Match.instance
   end
 
   def parser

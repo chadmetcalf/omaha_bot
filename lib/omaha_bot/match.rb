@@ -5,6 +5,10 @@ module OmahaBot
     attr_accessor :round, :small_blind, :big_blind, :on_button, :max_win_pot,
                   :amount_to_call, :table
 
+    def self.instance
+      @instance ||= new
+    end
+
     def initialize
       @table = []
     end

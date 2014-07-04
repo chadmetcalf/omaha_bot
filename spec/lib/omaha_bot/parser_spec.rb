@@ -43,10 +43,10 @@ module OmahaBot
     # Match smallBlind 15
     # Match bigBlind 30
     # Match onButton player1
-    describe "Match" do
+    context "Match" do
       let(:match) { Match.new }
       before(:each) do
-        allow(subject).to receive(:match) { match }
+        allow(parser).to receive(:match) { match }
       end
 
       it 'round' do
@@ -89,12 +89,16 @@ module OmahaBot
           match.table = ['7s','Js','3h']
 
           expect{parser.hear("Match table [7s,Js,3h,5d]")}.
-            to change{match.table}.from(['7s','Js','3h']).to(['7s', 'Js', '3h', '5d'])
+            to change{match.table}.from(['7s','Js','3h']).
+              to(['7s', 'Js', '3h', '5d'])
         end
 
         it "river" do
+          match.table = ['7s','Js','3h', '5d']
+
           expect{parser.hear("Match table [7s,Js,3h,5d,9s]")}.
-            to change{match.table}.from([]).to(['7s', 'Js', '3h', '5d', '9s'])
+            to change{match.table}.from(['7s','Js','3h', '5d']).
+              to(['7s', 'Js', '3h', '5d', '9s'])
         end
       end
     end
