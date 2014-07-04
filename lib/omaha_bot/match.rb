@@ -55,5 +55,16 @@ module OmahaBot
       @pot
     end
 
+    def player
+      @player ||= Player.new
+    end
+
+    def opponent
+      @opponent ||= Player.new
+    end
+
+    def players
+      [player, opponent]
+    end
   end
 end

@@ -26,17 +26,12 @@ module OmahaBot
     @parser ||= Parser.new
   end
 
-  def player
-    @player ||= Player.new
   class Settings < OpenStruct
     def self.instance
       @instance ||= new
     end
   end
 
-  def opponent
-    @opponent ||= Player.new
-  end
   def settings
     @settings ||= Settings.instance
   end
