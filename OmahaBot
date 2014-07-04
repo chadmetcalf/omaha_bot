@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+require './lib/omaha_bot'
+
+ENV['env'] ||= "production"
+
+if ENV['env'] == "test" || ENV['env'] == "development"
+  require 'bundler'
+  Bundler.require(:default, ENV['env'])
+end
+
+OmahaBot.runner
