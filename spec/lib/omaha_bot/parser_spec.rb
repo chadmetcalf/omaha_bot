@@ -131,5 +131,21 @@ module OmahaBot
         parser.hear("Action player2 5000")
       end
     end
+
+    context "Player" do
+      let(:player) {double "player"}
+
+      before(:each) do
+        allow(parser).to receive(:player) { player }
+        parser.settings.your_bot = "player1"
+      end
+
+      it "wins" do
+        expect(player).to receive(:win_round)
+
+        parser.hear("player1 wins 360")
+      end
+
+    end
   end
 end

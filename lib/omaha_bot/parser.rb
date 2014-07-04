@@ -27,7 +27,8 @@ module OmahaBot
     def player_hear(player, args)
       case args[1]
       when "wins"
-        player.finish_game
+        player.win_round
+        match.finish_round
       when "hand"
         hand = parse_cards(args[2])
       end
@@ -48,6 +49,18 @@ module OmahaBot
 
     def prepared_method(args)
       args[1].snakecaserize + "="
+    end
+
+    def player
+      match.player
+    end
+
+    def opponent
+      match.opponent
+    end
+
+    def players
+      match.players
     end
   end
 end
