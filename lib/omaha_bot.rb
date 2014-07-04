@@ -4,10 +4,16 @@ require_relative 'omaha_bot/player'
 
 require 'logger'
 require 'ostruct'
-require 'dotenv'
 
-Dotenv.load
-ENV['env'] ||= "production"
+begin
+  require 'dotenv'
+  Dotenv.load if defined?(Dotenv)
+  ENV['env'] ||= "production"
+rescue LoadError
+  # Must be in a non bundled env
+  # No problem, we'll just assume some things.
+  ENV['env'] = "production"
+end
 
 Bundler.require(:default, ENV['env']) if defined?(Bundler)
 
@@ -47,7 +53,7 @@ module OmahaBot
       @instance ||= ::Logger.new(STDOUT)
     end
   end
-  
+
   def setup_logger
     logger = Logger.instance
     logger.level = Logger::WARN

@@ -1,8 +1,8 @@
 source "https://rubygems.org"
 
-gem 'dotenv'
-
 group :development do
+  gem 'dotenv'
+
   gem 'rspec'
   gem 'fuubar', "~> 2.0.0.rc1"
 
