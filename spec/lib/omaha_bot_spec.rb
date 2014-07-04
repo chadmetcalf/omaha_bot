@@ -14,10 +14,4 @@ describe OmahaBot do
   it "has a logger" do
     expect(subject.logger).to be_a(Logger)
   end
-
-  xit "is a good sport" do
-    expect(OmahaBot.runner).to output("Good Game").to_stdout
-
-    STDOUT.puts "player1 wins 3000"
-  end
 end
