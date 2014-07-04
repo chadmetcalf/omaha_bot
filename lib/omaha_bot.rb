@@ -8,6 +8,8 @@ require 'dotenv'
 Dotenv.load
 ENV['env'] ||= "production"
 
+Bundler.require(:default, ENV['env']) if defined?(Bundler)
+
 module OmahaBot
   extend self
 
