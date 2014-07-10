@@ -1,5 +1,15 @@
 #!/usr/bin/env ruby
 
+STDERR.puts "Starting Runner"
+
 require './lib/omaha_bot'
 
-OmahaBot.runner
+begin
+  OmahaBot.runner
+rescue Exception => e
+  STDERR.puts "Runner blew up! #{e.message}"
+  e.backtrace.each do |trace|
+    STDERR.puts trace
+  end
+  raise e
+end
