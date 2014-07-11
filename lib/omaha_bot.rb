@@ -15,6 +15,8 @@ rescue LoadError
   ENV['env'] = "production"
 end
 
+STDOUT.sync = true
+
 Bundler.require(:default, ENV['env']) if defined?(Bundler)
 
 module OmahaBot
