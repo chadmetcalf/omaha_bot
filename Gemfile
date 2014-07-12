@@ -1,8 +1,15 @@
 source "https://rubygems.org"
 
-group :development do
-  gem 'dotenv'
+gem 'bundler'
+gem 'dotenv'
 
+# For Training the bot
+gem 'darwinning'
+
+group :development do
+end
+
+group :test do
   gem 'rspec'
   gem 'fuubar', "~> 2.0.0.rc1"
 
@@ -11,6 +18,6 @@ group :development do
   gem 'guard-bundler'
 
   gem 'ruby_gntp'
-end
 
-gem 'simplecov', :require => false, :group => :test
+  gem 'simplecov', :require => false
+end
