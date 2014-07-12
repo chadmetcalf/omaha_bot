@@ -1,66 +1,38 @@
-require_relative 'omaha_bot/parser'
-require_relative 'omaha_bot/match'
-require_relative 'omaha_bot/player'
-
-require 'logger'
-require 'ostruct'
-
 begin
   require 'dotenv'
   Dotenv.load if defined?(Dotenv)
   ENV['env'] ||= "production"
 rescue LoadError
   # Must be in a non bundled env
-  # No problem, we'll just assume some things.
+  # No problem, fall back on some assumtions.
   ENV['env'] = "production"
 end
 
+begin
+  # use `bundle install --standalone' to get this...
+  require_relative '../bundle/bundler/setup'
+rescue LoadError
+  # fall back to regular bundler if the developer hasn't bundled standalone
+  Bundler.require(:default, ENV['env']) if defined?(Bundler)
+end
+
+require_relative 'omaha_bot/core'
+require_relative 'omaha_bot/settings'
+require_relative 'omaha_bot/logger'
+require_relative 'omaha_bot/parser'
+require_relative 'omaha_bot/match'
+require_relative 'omaha_bot/player'
+require_relative 'omaha_bot/gene_player'
+require_relative 'omaha_bot/opponent_player'
+require_relative 'omaha_bot/training_player'
+
 STDOUT.sync = true
 
-Bundler.require(:default, ENV['env']) if defined?(Bundler)
-
 module OmahaBot
-  extend self
+  extend Core
 
   def self.runner
     match.play
-  end
-
-  def match
-    @match ||= Match.instance
-  end
-
-  def parser
-    @parser ||= Parser.new
-  end
-
-  class Settings < OpenStruct
-    def self.instance
-      @instance ||= new
-    end
-  end
-
-  def settings
-    @settings ||= Settings.instance
-  end
-
-  def logger
-    @logger ||= setup_logger
-  end
-
-  private
-
-  class Logger < ::Logger
-    def self.instance
-      @instance ||= ::Logger.new(STDOUT)
-    end
-  end
-
-  def setup_logger
-    logger = Logger.instance
-    logger.level = Logger::WARN
-    logger.level = Logger::INFO if ENV['env'] == 'development'
-    return logger
   end
 end
 

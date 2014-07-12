@@ -1,6 +1,6 @@
 module OmahaBot
   class Match
-    include OmahaBot
+    include Core
 
     attr_accessor :round, :small_blind, :big_blind, :on_button, :max_win_pot,
                   :amount_to_call, :table, :pot
@@ -56,15 +56,20 @@ module OmahaBot
     end
 
     def player
-      @player ||= Player.new
+      @player ||= setup_player
     end
 
     def opponent
-      @opponent ||= Player.new
+      @opponent ||= OpponentPlayer.new
     end
 
     def players
       [player, opponent]
+    end
+
+    def setup_player
+      return GenePlayer.new if env.production?
+      TrainingPlayer.new
     end
   end
 end

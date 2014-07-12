@@ -1,6 +1,8 @@
 module OmahaBot
-  class Player
-    include OmahaBot
+  module Player
+    extend self
+
+    include Core
 
     attr_accessor :stack, :hand
 
@@ -15,7 +17,15 @@ module OmahaBot
         check
         return
       end
-      fold
+
+      case rand(1..10)
+      when 1..6
+        check
+      when 7..9
+        call rand(@stack)
+      when 10
+        fold
+      end
     end
 
     def post(amount)

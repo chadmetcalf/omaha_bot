@@ -1,6 +1,6 @@
 module OmahaBot
   class Parser
-    include OmahaBot
+    include Core
 
     def hear(string)
       args = string.split(" ")
