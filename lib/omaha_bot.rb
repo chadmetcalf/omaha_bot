@@ -24,7 +24,9 @@ require_relative 'omaha_bot/match'
 require_relative 'omaha_bot/player'
 require_relative 'omaha_bot/gene_player'
 require_relative 'omaha_bot/opponent_player'
-require_relative 'omaha_bot/training_player'
+unless ENV['env'] == "production"
+  require_relative 'omaha_bot/training_player'
+end
 
 STDOUT.sync = true
 

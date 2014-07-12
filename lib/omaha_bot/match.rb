@@ -69,7 +69,8 @@ module OmahaBot
 
     def setup_player
       return GenePlayer.new if env.production?
-      TrainingPlayer.new
+      return TrainingPlayer.new if defined?(TrainingPlayer)
+      GenePlayer.new
     end
   end
 end
