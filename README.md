@@ -3,9 +3,9 @@ omaha_bot
 
 Basic Folding and Calling OmahaBot for theaigames.com Omaha competitions ready for some brains.
 
-To scan the STDOUT:
+To scan the STDOUT run the executable from the command line:
 
-    ./OmahaBot
+    ./OmahaBot.rb
 
 
 
