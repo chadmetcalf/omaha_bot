@@ -1,6 +1,8 @@
 .bundle
 bundle
 
+tmp
+
 .env
 
 Guardfile
