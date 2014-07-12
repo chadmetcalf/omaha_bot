@@ -8,13 +8,14 @@ rescue LoadError
   ENV['env'] = "production"
 end
 
-begin
+if ENV['env'] == "production"
   # use `bundle install --standalone' to get this...
   require_relative '../bundle/bundler/setup'
-rescue LoadError
+else
   # fall back to regular bundler if the developer hasn't bundled standalone
   Bundler.require(:default, ENV['env']) if defined?(Bundler)
 end
+
 
 require_relative 'omaha_bot/core'
 require_relative 'omaha_bot/settings'
