@@ -8,21 +8,20 @@ A minimum viable Brain:
   - Must have the ```Brain``` and ```Core``` modules mixed in to the ```CustomBrain``` class.
   - Must be registered in the ```Brain::REGISTERED_BRAINS``` constant with a symobol, i.e. ```:custom_brain```.
 
-    module OmahaBot
-      module Brain
-        class CustomBrain
-          # A Brain that folds like an oragami master
-          include Core
-          include Brain
+        module OmahaBot
+          module Brain
+            class CustomBrain
+              # A Brain that folds like an oragami master
+              include Core
+              include Brain
 
-          def decide
-            @decision = :fold
-            @decision_amount = nil
+              def decide
+                @decision = :fold
+                @decision_amount = nil
+              end
+            end
           end
-          
         end
-      end
-    end 
 
 ###Instantiate a brain
 Let the Match know which brain to use for the player in ```Match#setup_player```.
