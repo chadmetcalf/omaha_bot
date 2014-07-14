@@ -89,8 +89,10 @@ module OmahaBot
     # The player acts
     def act
       return missing_brain! unless brain?
-      d = brain.decision
-      send(*d)
+      decision = brain.decision
+      send(*decision)
+      logger.info "Bot decided to #{decision.join(" ")}"
+      0
     end
 
     ##
