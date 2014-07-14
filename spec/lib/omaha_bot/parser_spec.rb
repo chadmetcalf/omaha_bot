@@ -50,8 +50,10 @@ module OmahaBot
       end
 
       it 'round' do
+        allow(match).to receive(:play_hand) { true }
+
         expect{parser.hear("Match round 1")}.
-          to change{match.round}.from(nil).to("1")
+          to change{match.round}.from(nil).to(1)
       end
 
       it 'small blind' do
@@ -76,7 +78,7 @@ module OmahaBot
 
       it "amount to call" do
         expect{parser.hear("Match amountToCall 15")}.
-          to change{match.amount_to_call}.from(nil).to("15")
+          to change{match.amount_to_call}.from(nil).to(15)
       end
 
       context "table" do
@@ -133,19 +135,12 @@ module OmahaBot
     end
 
     context "Player" do
-      let(:player) {double "player"}
-
-      before(:each) do
-        allow(parser).to receive(:player) { player }
+      it "wins a hand" do
         parser.settings.your_bot = "player1"
-      end
-
-      it "wins" do
-        expect(player).to receive(:win_round)
+        expect(parser.match).to receive(:finish_hand)
 
         parser.hear("player1 wins 360")
       end
-
     end
   end
 end

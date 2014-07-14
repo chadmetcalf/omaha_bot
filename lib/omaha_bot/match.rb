@@ -12,24 +12,30 @@ module OmahaBot
     def initialize
       @table = []
       @pot   = 0
-
-      start_round
     end
 
+
+    # The Parser setting the round is what triggers a player hand.
     def round=(number=1)
-      @round = number
-      start_round
+      @round = number.to_i
+      play_hand
     end
+    alias :hand_number :round
 
-    def start_round
-      players.each {|p| p.start_round}
-      logger.info "Starting Round #{round}"
-    end
-
-    def finish_round
-      players.each {|p| p.finish_round}
+    def play_hand
+      logger.info "Playing Hand #{hand_number}"
       @table = []
       @pot   = 0
+      players.each {|p| p.start_hand}
+    end
+
+    def amount_to_call
+      return nil if @amount_to_call.nil?
+      @amount_to_call.to_i
+    end
+
+    def finish_hand
+      players.each {|p| p.finish_hand}
     end
 
     def play
@@ -48,7 +54,7 @@ module OmahaBot
     end
 
     def pot=(amount)
-      @pot = amount
+      @pot = amount.to_i
     end
 
     def pot
@@ -60,7 +66,7 @@ module OmahaBot
     end
 
     def opponent
-      @opponent ||= OpponentPlayer.new
+      @opponent ||= Player.new(:opponent)
     end
 
     def players
@@ -68,9 +74,11 @@ module OmahaBot
     end
 
     def setup_player
-      return GenePlayer.new if env.production?
-      return TrainingPlayer.new if defined?(TrainingPlayer)
-      GenePlayer.new
+      Player.new(:call)
+
+      # return Player.new(:compitition) if env.production?
+      # return Player.new(:training) if defined?(TrainingPlayer)
+      # GenePlayer.new
     end
   end
 end

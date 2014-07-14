@@ -1,7 +1,7 @@
 module OmahaBot
   class Logger < ::Logger
     def self.instance
-      @instance ||= ::Logger.new(STDOUT)
+      @instance ||= Logger.new(STDOUT)
     end
 
     def self.setup_logger

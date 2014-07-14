@@ -23,11 +23,6 @@ require_relative 'omaha_bot/logger'
 require_relative 'omaha_bot/parser'
 require_relative 'omaha_bot/match'
 require_relative 'omaha_bot/player'
-require_relative 'omaha_bot/gene_player'
-require_relative 'omaha_bot/opponent_player'
-unless ENV['env'] == "production"
-  require_relative 'omaha_bot/training_player'
-end
 
 STDOUT.sync = true
 
@@ -40,14 +35,20 @@ module OmahaBot
 end
 
 
-String.class_eval do
-  def snakecaserize
-    #gsub(/::/, '/').
-    gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
-    gsub(/([a-z\d])([A-Z])/,'\1_\2').
-    tr('-', '_').
-    gsub(/\s/, '_').
-    gsub(/__+/, '_').
-    downcase
+[String, Symbol].each do |klass|
+  klass.class_eval do
+    def snakecaserize
+      #gsub(/::/, '/').
+      to_s.gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
+      gsub(/([a-z\d])([A-Z])/,'\1_\2').
+      tr('-', '_').
+      gsub(/\s/, '_').
+      gsub(/__+/, '_').
+      downcase
+    end
+
+    def constantize
+      to_s.split("_").map!(&:capitalize).join("")
+    end
   end
 end
