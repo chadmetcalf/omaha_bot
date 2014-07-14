@@ -10,16 +10,18 @@ module OmahaBot
           raise OmahaBot::NoBrainError.new "#{brain_type} is not a type of brain."
         end
         #if instance variable of brain type exists, return that
-        if instance_variable_defined?("@#{brain_type}")
-          return instance_variable("@#{brain_type}")
+        brain = if instance_variable_defined?("@#{brain_type}")
+          instance_variable_get("@#{brain_type}")
         else
           brain = OmahaBot::Brain.const_get(brain_type.constantize).new
 
           instance_variable_set("@#{brain_type}", brain)
 
-          return brain
+          brain
         end
-        raise NoBrainError.new "No Brain instance!"
+
+        raise NoBrainError.new "No Brain instance for #{brain_type}!" unless brain
+        brain
       end
     end
 
@@ -30,12 +32,13 @@ module OmahaBot
     extend self
     include Core
 
-    REGISTERED_BRAINS = [:compitition, :training, :opponent, :all_in, :call]
+    REGISTERED_BRAINS = [:compitition, :training, :opponent,
+                         :all_in, :call, :max_bet]
     REGISTERED_BRAINS.each do |registered_brain|
       require_relative "brains/#{registered_brain}"
     end
 
-    attr_accessor :table, :decision, :decision_amount
+    attr_accessor
 
     def initialize
     end

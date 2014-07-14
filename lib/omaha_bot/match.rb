@@ -74,11 +74,11 @@ module OmahaBot
     end
 
     def setup_player
-      Player.new(:call)
-
-      # return Player.new(:compitition) if env.production?
-      # return Player.new(:training) if defined?(TrainingPlayer)
-      # GenePlayer.new
+      return Player.new(:max_bet)
+      return Player.new(:call) if env.test?
+      return Player.new(:training) if defined?(Brain::Training)
+      return Player.new(:compitition) if env.production?
+      Player.new(:all_in)
     end
   end
 end

@@ -135,6 +135,30 @@ module OmahaBot
     end
 
     context "Player" do
+      let(:match)  {Match.new}
+      let(:player) {Player.new(:call)}
+
+      before(:each) do
+        allow(parser).to receive(:match)  { match }
+        allow(match).to  receive(:player) { player }
+        allow(parser).to receive(:player) { player }
+      end
+
+      it  "starts a hand" do
+        expect(player).to receive(:start_hand).once
+
+        parser.hear("Match round 1")
+      end
+
+      it "has a hand" do
+        player.start_hand
+        parser.settings.your_bot = "player1"
+
+        expect{parser.hear("player1 hand [8h,8s,5d,6s]")}.
+          to change{player.hand.hole_cards}.from([]).
+            to(['8h', '8s', '5d', '6s'])
+      end
+
       it "wins a hand" do
         parser.settings.your_bot = "player1"
         expect(parser.match).to receive(:finish_hand)

@@ -16,7 +16,6 @@ else
   Bundler.require(:default, ENV['env']) if defined?(Bundler)
 end
 
-
 require_relative 'omaha_bot/core'
 require_relative 'omaha_bot/settings'
 require_relative 'omaha_bot/logger'

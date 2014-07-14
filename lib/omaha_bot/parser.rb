@@ -29,7 +29,7 @@ module OmahaBot
       when "post"
         player.post(args[2].to_i)
       when "hand"
-        hand = parse_cards(args[2])
+        player.hand.hole_cards = parse_cards(args[2])
       when "wins"
         match.finish_hand
       end

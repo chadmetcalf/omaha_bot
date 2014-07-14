@@ -1,16 +1,24 @@
 require "darwinning"
 
 module OmahaBot
-  class TrainingPlayer < ::Darwinning::Organism
-    include Brain
-    extend Brain::ClassMethods
+  module Brain
+    class Training < ::Darwinning::Organism
+      include Brain
+      extend Brain::ClassMethods
 
-    def decide
-      @decision = :fold
-    end
+      def decide
+        raise winning_probability.inspect
 
-    def fitness
-      0
+        @decision = :all_in
+      end
+
+      def winning_probability
+        @hand.winning_probability
+      end
+
+      def fitness
+        0
+      end
     end
   end
 end

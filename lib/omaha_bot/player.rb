@@ -1,4 +1,5 @@
 require_relative 'brain'
+require_relative 'hand'
 
 module OmahaBot
   class Player
@@ -75,16 +76,8 @@ module OmahaBot
     ##
     # the player starts a hand
     def start_hand
-      hand = Hand.new
-      @action = @brain.start_hand(hand)
-    end
-
-    class Hand
-      attr_accessor :hole, :probaility_of_winning
-      def initialize
-        @hole = []
-        @probability_of_winning = nil
-      end
+      @hand = Hand.new
+      brain.start_hand(hand)
     end
 
     ##
