@@ -50,7 +50,7 @@ module OmahaBot
       end
 
       it 'round' do
-        allow(match).to receive(:play_hand) { true }
+        allow(match).to receive(:start_hand) { true }
 
         expect{parser.hear("Match round 1")}.
           to change{match.round}.from(nil).to(1)
@@ -73,7 +73,7 @@ module OmahaBot
 
       it "max win pot" do
         expect{parser.hear("Match maxWinPot 45")}.
-          to change{match.max_win_pot}.from(nil).to("45")
+          to change{match.max_win_pot}.from(nil).to(45)
       end
 
       it "amount to call" do

@@ -6,7 +6,7 @@ module OmahaBot
 
       def decide
         @decision = :bet
-        @decisoun_amount = match.pot
+        @decision_amount = match.pot
       end
 
     end

@@ -4,6 +4,8 @@ module OmahaBot
       include Brain
       extend Brain::ClassMethods
 
+      def decide
+      end
     end
   end
 end

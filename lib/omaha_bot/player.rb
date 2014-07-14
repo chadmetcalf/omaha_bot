@@ -30,13 +30,7 @@ module OmahaBot
     end
 
     ##
-    # Actions
-
-    def post(amount)
-      @stack -= amount
-      match.pot += amount
-    end
-
+    # ACTION METHODS
     def fold
       puts "fold 0"
     end
@@ -47,31 +41,28 @@ module OmahaBot
 
     def call
       return check unless match.amount_to_call
-      @stack -= match.amount_to_call
-      match.pot += match.amount_to_call
       puts "call #{match.amount_to_call}"
     end
 
-    def bet(amount = 0)
-      amount = amount.to_i
+    def bet(amount)
       return all_in if @stack <= amount
+      puts "raise #{amount}"
+    end
+
+    def all_in
+      puts "raise #{@stack}"
+    end
+
+    ##
+    # ACCOUNTING METHOD
+    def push_chips(amount)
       #move amount
       #to the pot
       match.pot += amount
       #from the stack
       @stack -= amount
-      puts "raise #{amount}"
     end
 
-    def all_in
-      #move stack
-      #to the pot
-      match.pot += @stack
-      #from the stack
-      @stack -= @stack
-
-      puts "raise #{@stack}"
-    end
 
     ##
     # the player starts a hand
@@ -81,15 +72,39 @@ module OmahaBot
     end
 
     ##
-    # The player acts
-    def act
-      return missing_brain! unless brain?
-      brain.decide
-      send(brain.decision)
+    # The player looks at hole cards and starts thinking
+    def hole_cards=(card_array)
+      @hand.hole_cards = card_array
+      decide
+      @hand.hole_cards
     end
 
     ##
-    # the player finishes the hand
+    # Evaluate the current situation and decide what action to take
+    def decide
+      brain.decide
+    end
+
+    ##
+    # The player acts
+    def act
+      return missing_brain! unless brain?
+      d = brain.decision
+      send(*d)
+    end
+
+    ##
+    # The player wins this hand
+    def win_hand
+      #move amount
+      #to the stack
+      @stack += match.pot
+      #from the pot
+      match.pot = 0
+    end
+
+    ##
+    # The player finishes the hand
     def finish_hand
     end
 

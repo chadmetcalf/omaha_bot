@@ -5,6 +5,8 @@ module OmahaBot
     attr_accessor :round, :small_blind, :big_blind, :on_button, :max_win_pot,
                   :amount_to_call, :table, :pot
 
+
+
     def self.instance
       @instance ||= new
     end
@@ -18,11 +20,15 @@ module OmahaBot
     # The Parser setting the round is what triggers a player hand.
     def round=(number=1)
       @round = number.to_i
-      play_hand
+      start_hand
     end
     alias :hand_number :round
 
-    def play_hand
+    def max_win_pot=(amount)
+      @max_win_pot = amount.to_i
+    end
+
+    def start_hand
       logger.info "Playing Hand #{hand_number}"
       @table = []
       @pot   = 0
@@ -34,7 +40,8 @@ module OmahaBot
       @amount_to_call.to_i
     end
 
-    def finish_hand
+    def finish_hand(winning_player)
+      winning_player.win_hand
       players.each {|p| p.finish_hand}
     end
 
@@ -47,6 +54,8 @@ module OmahaBot
 
     def table=(array_of_cards)
       @table = array_of_cards
+      player.decide
+      @table
     end
 
     def table
@@ -55,10 +64,6 @@ module OmahaBot
 
     def pot=(amount)
       @pot = amount.to_i
-    end
-
-    def pot
-      @pot
     end
 
     def player
@@ -74,11 +79,10 @@ module OmahaBot
     end
 
     def setup_player
+      return Player.new(:call)     if env.test?
+      # return Player.new(:training)
+      # return Player.new(:compitition) if env.production?
       return Player.new(:max_bet)
-      return Player.new(:call) if env.test?
-      return Player.new(:training) if defined?(Brain::Training)
-      return Player.new(:compitition) if env.production?
-      Player.new(:all_in)
     end
   end
 end

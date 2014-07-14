@@ -24,14 +24,28 @@ module OmahaBot
 
     private
 
-    def player_hear(player, args)
+    def player_hear(listener, args)
+      logger.debug args.join(" ")
       case args[1]
-      when "post"
-        player.post(args[2].to_i)
       when "hand"
-        player.hand.hole_cards = parse_cards(args[2])
+        listener.hole_cards= parse_cards(args[2])
       when "wins"
-        match.finish_hand
+        logger.debug "     -> pot = #{match.pot}"
+        match.finish_hand(listener)
+      when "stack"
+        logger.debug "     -> #{args[0]} stack = #{listener.stack}"
+        unless listener.stack == args[2].to_i
+          error_string = "Stack difference error!\n"\
+            "     -> Player Stack: #{listener.stack}\n"\
+            "     -> Input: #{args[2]}"
+          logger.debug error_string
+        end
+        # The local arena does not keep track of blinds correctly
+        # Update the stack every time it is read
+        listener.stack = args[2].to_i
+      when "call", "raise", "post"
+        listener.push_chips(args[2].to_i)
+        player.decide if listener == opponent
       end
     end
 

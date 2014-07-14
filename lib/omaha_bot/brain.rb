@@ -5,10 +5,12 @@ module OmahaBot
     class BadDecisionError < ::NoMethodError; end
 
     module ClassMethods
-      def self.instance(brain_type)
+      def self.instance(brain_type_arg)
+        brain_type = brain_type_arg
         unless REGISTERED_BRAINS.include?(brain_type.snakecaserize.to_sym)
           raise OmahaBot::NoBrainError.new "#{brain_type} is not a type of brain."
         end
+        require_relative "brains/#{brain_type}"
         #if instance variable of brain type exists, return that
         brain = if instance_variable_defined?("@#{brain_type}")
           instance_variable_get("@#{brain_type}")
@@ -34,11 +36,8 @@ module OmahaBot
 
     REGISTERED_BRAINS = [:compitition, :training, :opponent,
                          :all_in, :call, :max_bet]
-    REGISTERED_BRAINS.each do |registered_brain|
-      require_relative "brains/#{registered_brain}"
-    end
 
-    attr_accessor
+    attr_accessor :brain_type
 
     def initialize
     end
@@ -52,14 +51,15 @@ module OmahaBot
     end
 
     def decide
-      raise BadDecisionError.new "No decision is being made by #{@brain} is not a possible decision"
+      raise BadDecisionError.new "No decision is being made by #{self.brain_type} is not a possible decision"
     end
 
     def decision
+      decide if @decision.nil?
       unless possible_decisions.include? @decision
         raise BadDecisionError.new "#{@decision} is not a possible decision"
       end
-      decision_args
+      return decision_args
     end
 
     def possible_decisions
@@ -67,7 +67,7 @@ module OmahaBot
     end
 
     def decision_args
-      return @decision, @decision_amount if @decision_amount
+      return [@decision, @decision_amount] if @decision_amount
       @decision
     end
 

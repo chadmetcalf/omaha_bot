@@ -3,6 +3,7 @@ require 'open3'
 module OmahaBot
   class Hand
     attr_accessor :hole_cards
+
     def initialize
       @hole_cards = []
       @winnning_probability = nil
@@ -11,6 +12,7 @@ module OmahaBot
     def winning_probability
       @winning_probability ||= calculate_winning_probability
     end
+    
 
     def calculate_winning_probability
       return 1
