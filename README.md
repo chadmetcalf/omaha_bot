@@ -11,7 +11,7 @@ A minimum viable Brain:
         module OmahaBot
           module Brain
             class CustomBrain
-              # A Brain that folds like an oragami master
+              # A Brain that folds like an origami master
               include Core
               include Brain
 
